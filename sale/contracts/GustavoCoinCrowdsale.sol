@@ -6,6 +6,7 @@ import 'zeppelin-solidity/contracts/crowdsale/validation/TimedCrowdsale.sol';
 
 
 contract GustavoCoinCrowdsale is TimedCrowdsale, MintedCrowdsale {
+    uint totalRaised;
     function GustavoCoinCrowdsale
         (
             uint256 _openingTime,
@@ -19,4 +20,17 @@ contract GustavoCoinCrowdsale is TimedCrowdsale, MintedCrowdsale {
         TimedCrowdsale(_openingTime, _closingTime) {
 
         }
-}
+        function createNewToken() internal returns (MintableToken) {
+             return new GustavoCoin();
+        }
+        function () external payable {
+         buyTokens(msg.sender);
+         }
+         function getBal(address _sender) external view returns(uint256) {
+            uint256 bal=token.balanceOf(_sender);
+            return bal;
+         }    
+         function getTotalRaised() view public returns (uint) {
+            return totalRaised;
+         }
+  }
